@@ -114,6 +114,9 @@ resource aws_ecs_task_definition task_definition {
   [
     {
       "cpu": 0,
+      "environment": [
+      {"name": "RELEASE_COOKIE", "value": "KMtNJ/pHZfrpCU8lVJk4XhpkQUbZOzXCYpj2Ri1ERSLB/zn64RaAA6/mzPcySYtX"}
+      ],
       "image": "${aws_ecr_repository.repo.repository_url}:latest",
       "logConfiguration": {
         "logDriver": "awslogs",
