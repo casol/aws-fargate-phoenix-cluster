@@ -146,7 +146,7 @@ resource aws_ecs_service service {
   cluster         = aws_ecs_cluster.ecs_cluster.id
 
   task_definition = "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:task-definition/${aws_ecs_task_definition.task_definition.family}:${var.task_version}"
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
   network_configuration {
     security_groups   = [aws_security_group.security_group.id]
