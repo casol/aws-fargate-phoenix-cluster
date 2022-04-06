@@ -72,7 +72,7 @@ resource aws_lb load_balancer {
   security_groups    = [aws_security_group.lb_security_group.id]
   subnets            = data.aws_subnet.default_subnet.*.id
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 }
 
 resource aws_security_group lb_security_group {
@@ -114,9 +114,6 @@ resource aws_ecs_task_definition task_definition {
   [
     {
       "cpu": 0,
-      "environment": [
-      {"name": "RELEASE_COOKIE", "value": "KMtNJ/pHZfrpCU8lVJk4XhpkQUbZOzXCYpj2Ri1ERSLB/zn64RaAA6/mzPcySYtX"}
-      ],
       "image": "${aws_ecr_repository.repo.repository_url}:latest",
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -133,7 +130,7 @@ resource aws_ecs_task_definition task_definition {
           "containerPort": 4000
         }
       ],
-      "environment": [],
+      "environment": [{"name": "RELEASE_COOKIE", "value": "KMtNJ/pHZfrpCU8lVJk4XhpkQUbZOzXCYpj2Ri1ERSLB/zn64RaAA6/mzPcySYtX"}],
       "mountPoints": [],
       "volumesFrom": [],
       "essential": true,
@@ -148,7 +145,7 @@ resource aws_ecs_service service {
   name            = "${var.app_name}_service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
 
-  task_definition = "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:task-definition/${aws_ecs_task_definition.task_definition.family}:${var.task_version}"
+  task_definition = "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:task-definition/${aws_ecs_task_definition.task_definition.family}"
   desired_count   = 2
   launch_type     = "FARGATE"
   network_configuration {
